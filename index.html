@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Luzia Pedro — Portfolio BTS SIO SISR</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Hanken+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--rose:#D58490;--rose-lt:#e8b0b9;--rose-bg:#fdf4f5;--rose-mid:#c0717d;--black:#0c0c0c;--white:#ffffff;--off:#fafafa;--border:#e8e8e8;--text:#0c0c0c;--muted:#888;--light:#bbb;--serif:'Cormorant',Georgia,serif;--sans:'Hanken Grotesk',sans-serif;--mono:'JetBrains Mono',monospace;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--white);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.7;overflow-x:hidden;cursor:none;}
+#cur{position:fixed;width:6px;height:6px;background:var(--rose);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;}
+#cur-r{position:fixed;width:26px;height:26px;border:1px solid var(--rose);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);opacity:.4;transition:width .25s,height .25s;}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1.25rem 4rem;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.logo{font-family:var(--serif);font-size:1.15rem;font-weight:400;letter-spacing:.04em;}
+.logo i{font-style:italic;color:var(--rose);}
+.nav-links{display:flex;gap:2rem;align-items:center;}
+.nav-links a{font-size:.7rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--muted);transition:color .2s;}
+.nav-links a:hover{color:var(--rose);}
+.nav-tag{font-family:var(--mono);font-size:.58rem;color:var(--rose);border:1px solid var(--rose-lt);padding:.25rem .7rem;letter-spacing:.06em;}
+#hero{min-height:100vh;display:grid;grid-template-columns:55% 45%;}
+.hero-l{display:flex;flex-direction:column;justify-content:flex-end;padding:0 5rem 5rem;position:relative;}
+.hero-l::after{content:'';position:absolute;top:15%;right:0;bottom:15%;width:1px;background:linear-gradient(to bottom,transparent,var(--border) 30%,var(--border) 70%,transparent);}
+.hero-overline{font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--rose);margin-bottom:2rem;display:flex;align-items:center;gap:.75rem;animation:up .9s .1s both;}
+.hero-overline::before{content:'';width:32px;height:1px;background:var(--rose);}
+.hero-name{font-family:var(--serif);font-size:clamp(5rem,9vw,8.5rem);font-weight:300;line-height:.95;letter-spacing:-.02em;animation:up .9s .2s both;}
+.hero-name em{display:block;font-style:italic;color:var(--rose);}
+.hero-line{width:48px;height:1px;background:var(--rose);margin:2.5rem 0;animation:up .9s .3s both;}
+.hero-bio{font-size:.95rem;font-weight:300;color:var(--muted);max-width:380px;line-height:1.85;animation:up .9s .35s both;}
+.hero-btns{margin-top:2.5rem;display:flex;gap:.85rem;animation:up .9s .45s both;}
+.btn{font-family:var(--sans);font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;padding:.7rem 1.65rem;cursor:pointer;border:none;transition:all .22s;display:inline-block;}
+.btn-fill{background:var(--black);color:var(--white);}
+.btn-fill:hover{background:var(--rose);}
+.btn-line{background:transparent;border:1px solid var(--border);color:var(--black);}
+.btn-line:hover{border-color:var(--rose);color:var(--rose);}
+.hero-r{background:var(--off);display:flex;flex-direction:column;justify-content:center;padding:6rem 4rem;}
+.hero-fact{padding:1.75rem 0;border-bottom:1px solid var(--border);}
+.hero-fact:first-child{border-top:1px solid var(--border);}
+.hf-label{font-family:var(--mono);font-size:.56rem;letter-spacing:.15em;text-transform:uppercase;color:var(--light);margin-bottom:.3rem;}
+.hf-val{font-family:var(--serif);font-size:1.45rem;font-weight:400;line-height:1.2;}
+.hf-val i{font-style:italic;color:var(--rose);}
+.sec{padding:7rem 0;}
+.sec-inner{max-width:1160px;margin:0 auto;padding:0 4rem;}
+.sec-alt{background:var(--off);}
+.sec-dark{background:var(--black);color:var(--white);}
+.sec-rose-bg{background:var(--rose-bg);}
+.sec-header{display:flex;align-items:flex-end;justify-content:space-between;padding-bottom:2rem;margin-bottom:3.5rem;border-bottom:1px solid var(--border);}
+.sec-dark .sec-header{border-color:rgba(255,255,255,.07);}
+.sec-rose-bg .sec-header{border-color:rgba(213,132,144,.2);}
+.sec-tag{font-family:var(--mono);font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--rose);margin-bottom:.45rem;}
+h2{font-family:var(--serif);font-size:clamp(2rem,3.5vw,3rem);font-weight:300;line-height:1.05;}
+h2 i{font-style:italic;color:var(--rose);}
+.sec-dark h2{color:var(--white);}
+.sec-count{font-family:var(--serif);font-style:italic;font-size:5.5rem;font-weight:300;color:var(--border);line-height:1;}
+.sec-dark .sec-count{color:rgba(255,255,255,.04);}
+.sec-rose-bg .sec-count{color:rgba(213,132,144,.12);}
+.about-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:5rem;align-items:start;}
+.about-lead{font-family:var(--serif);font-size:1.4rem;font-weight:300;line-height:1.65;margin-bottom:1.5rem;}
+.about-lead i{font-style:italic;color:var(--rose);}
+.about-p{font-size:.88rem;color:var(--muted);font-weight:300;line-height:1.9;margin-bottom:.85rem;}
+.about-p strong{color:var(--black);font-weight:500;}
+.meta{display:flex;flex-direction:column;}
+.mr{display:flex;justify-content:space-between;align-items:center;padding:.85rem 0;border-bottom:1px solid var(--border);font-size:.82rem;}
+.mr:first-child{border-top:1px solid var(--border);}
+.mr-k{font-family:var(--mono);font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--light);}
+.mr-v{font-weight:500;text-align:right;}
+.skills-cols{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid rgba(255,255,255,.07);overflow:hidden;}
+.sk-col{padding:2.25rem 2rem;border-right:1px solid rgba(255,255,255,.07);}
+.sk-col:last-child{border-right:none;}
+.sk-title{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--rose-lt);margin-bottom:1.5rem;display:flex;align-items:center;gap:.6rem;}
+.sk-title::before{content:'';width:16px;height:1px;background:var(--rose);}
+.bubbles{display:flex;flex-wrap:wrap;gap:.45rem;}
+.bub{font-family:var(--mono);font-size:.6rem;padding:.28rem .75rem;border:1px solid;transition:all .2s;cursor:default;}
+.bub-rose{background:rgba(213,132,144,.1);color:var(--rose-lt);border-color:rgba(213,132,144,.25);}
+.bub-rose:hover{background:var(--rose);color:var(--white);border-color:var(--rose);}
+.bub-w{background:rgba(255,255,255,.04);color:rgba(255,255,255,.45);border-color:rgba(255,255,255,.1);}
+.bub-w:hover{background:rgba(255,255,255,.1);color:var(--white);border-color:rgba(255,255,255,.25);}
+.proj-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+.pc{border:1px solid var(--border);padding:2.25rem;transition:all .28s;position:relative;overflow:hidden;background:var(--white);}
+.pc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--rose);transform:scaleX(0);transform-origin:left;transition:transform .3s;}
+.pc:hover{border-color:var(--rose-lt);box-shadow:0 8px 40px rgba(213,132,144,.1);}
+.pc:hover::before{transform:scaleX(1);}
+.pc-accent{background:var(--rose-bg);border-color:rgba(213,132,144,.25);}
+.pc-num{position:absolute;bottom:1.5rem;right:2rem;font-family:var(--serif);font-style:italic;font-size:4.5rem;font-weight:300;color:#f0f0f0;line-height:1;}
+.pc-accent .pc-num{color:rgba(213,132,144,.15);}
+.pc-title{font-family:var(--serif);font-size:1.15rem;font-weight:400;margin-bottom:.7rem;line-height:1.2;padding-right:3rem;}
+.pc-accent .pc-title{color:var(--rose-mid);}
+.pc-desc{font-size:.82rem;color:var(--muted);font-weight:300;line-height:1.8;margin-bottom:1rem;}
+.ptags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1rem;}
+.ptag{font-family:var(--mono);font-size:.56rem;padding:.15rem .55rem;border:1px solid var(--border);color:var(--muted);letter-spacing:.04em;}
+.pc-accent .ptag{border-color:rgba(213,132,144,.2);color:var(--rose-mid);background:rgba(213,132,144,.07);}
+.pc-big{grid-row:span 2;display:flex;flex-direction:column;}
+.pc-big .pc-desc{flex:1;}
+.pc-full{grid-column:span 2;}
+.pc-full-inner{display:grid;grid-template-columns:1fr 220px;gap:2rem;align-items:start;}
+.srv-row{border-top:1px solid var(--border);padding-top:.85rem;margin-top:.25rem;}
+.pc-accent .srv-row{border-color:rgba(213,132,144,.2);}
+.srv-lbl{font-family:var(--mono);font-size:.52rem;letter-spacing:.15em;text-transform:uppercase;color:var(--light);margin-bottom:.45rem;}
+.srv-chips{display:flex;flex-wrap:wrap;gap:.4rem;}
+.srv-btn{font-family:var(--mono);font-size:.6rem;padding:.3rem .75rem;background:var(--black);color:rgba(255,255,255,.8);letter-spacing:.04em;border:1px solid var(--black);cursor:pointer;transition:all .22s;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;}
+..srv-btn::after{content:'↗';font-size:.55rem;opacity:.5;}
+.srv-btn:hover{background:var(--rose);border-color:var(--rose);color:var(--white);}
+.pc-accent .srv-btn{background:var(--rose);border-color:var(--rose);color:var(--white);}
+.pc-accent .srv-btn:hover{background:var(--rose-mid);border-color:var(--rose-mid);}
+.stage-vide{text-align:center;padding:4rem 2rem;color:var(--light);font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;border:1px dashed var(--border);}
+.parc-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;}
+.parc-sect-title{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--rose);margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--border);}
+.tl-row{display:grid;grid-template-columns:95px 12px 1fr;gap:0 1.25rem;}
+.tl-yr{text-align:right;font-family:var(--mono);font-size:.58rem;color:var(--rose);padding-top:.15rem;}
+.tl-spine{display:flex;flex-direction:column;align-items:center;}
+.tl-dot{width:7px;height:7px;border-radius:50%;background:var(--rose);flex-shrink:0;margin-top:.22rem;}
+.tl-line{flex:1;width:1px;background:var(--border);margin:5px 0;}
+.tl-row:last-child .tl-line{display:none;}
+.tl-body{padding-bottom:1.75rem;}
+.tl-place{font-weight:600;font-size:.9rem;margin-bottom:.1rem;}
+.tl-role{font-family:var(--mono);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);margin-bottom:.4rem;}
+.tl-desc{font-size:.8rem;color:var(--muted);font-weight:300;line-height:1.8;}
+.contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);overflow:hidden;}
+.cc{background:var(--white);padding:2rem 2.5rem;display:flex;align-items:center;gap:1.5rem;text-decoration:none;color:var(--text);transition:background .2s;}
+.cc:hover{background:var(--rose-bg);}
+.cc-icon{width:40px;height:40px;background:var(--black);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.7rem;color:var(--white);flex-shrink:0;transition:background .2s;}
+.cc:hover .cc-icon{background:var(--rose);}
+.cc-lbl{font-family:var(--mono);font-size:.54rem;letter-spacing:.12em;text-transform:uppercase;color:var(--light);margin-bottom:.15rem;}
+.cc-val{font-weight:500;font-size:.88rem;}
+footer{background:var(--black);color:rgba(255,255,255,.25);font-family:var(--mono);font-size:.58rem;text-align:center;padding:2rem;}
+footer span{color:var(--rose);}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .75s cubic-bezier(.16,1,.3,1),transform .75s cubic-bezier(.16,1,.3,1);}
+.rv.on{opacity:1;transform:none;}
+.rv.d1{transition-delay:.1s;}.rv.d2{transition-delay:.2s;}
+@keyframes up{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem;}.nav-links a{display:none;}
+  #hero{grid-template-columns:1fr;}.hero-l{padding:6rem 1.5rem 3rem;}.hero-r{padding:3rem 1.5rem;}
+  .sec-inner{padding:0 1.5rem;}
+  .about-grid,.parc-grid,.contact-wrap,.skills-cols{grid-template-columns:1fr;}
+  .proj-layout{grid-template-columns:1fr;}.pc-big{grid-row:auto;}.pc-full{grid-column:auto;}.pc-full-inner{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur-r"></div>
+
+<nav>
+  <div class="logo">Luzia <i>Pedro</i></div>
+  <div class="nav-links">
+    <a href="#about">Profil</a>
+    <a href="#skills">Comp&eacute;tences</a>
+    <a href="#projets">Projets</a>
+    <a href="#stage">Stage</a>
+    <a href="#parcours">Parcours</a>
+    <a href="#contact">Contact</a>
+    <a href="#Veille">Veille technologique</a>
+    <span class="nav-tag">BTS SIO &middot; SISR</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-l">
+    <div class="hero-overline">Portfolio &middot; 2026</div>
+    <h1 class="hero-name">Luzia<em>Pedro</em></h1>
+    <div class="hero-line"></div>
+    <p class="hero-bio">Technicienne en infrastructure syst&egrave;mes &amp; r&eacute;seaux. Administration, virtualisation, cybers&eacute;curit&eacute; &mdash; avec rigueur et m&eacute;thode.</p>
+    <div class="hero-btns">
+      <a href="#projets" class="btn btn-fill">Voir les projets</a>
+      <a href="#contact" class="btn btn-line">Contact</a>
+    </div>
+  </div>
+  <div class="hero-r">
+    <div class="hero-fact"><div class="hf-label">Formation</div><div class="hf-val">BTS SIO <i>SISR</i></div></div>
+    <div class="hero-fact"><div class="hf-label">&Eacute;tablissement</div><div class="hf-val">Lyc&eacute;e <i>Mathias</i></div></div>
+    <div class="hero-fact"><div class="hf-label">Ville</div><div class="hf-val">Chalon-sur-<i>Sa&ocirc;ne</i></div></div>
+    <div class="hero-fact"><div class="hf-label">Promotion</div><div class="hf-val">2024 <i>&mdash; 2026</i></div></div>
+    <div class="hero-fact"><div class="hf-label">Projets r&eacute;alis&eacute;s</div><div class="hf-val">8 <i>projets</i></div></div>
+  </div>
+</section>
+
+<!-- 01 PROFIL -->
+<section class="sec sec-alt" id="about">
+  <div class="sec-inner">
+    <div class="sec-header rv"><div><p class="sec-tag">01 &mdash; Profil</p><h2>&Agrave; propos de <i>moi</i></h2></div><span class="sec-count">01</span></div>
+    <div class="about-grid">
+      <div class="rv d1">
+        <p class="about-lead">Etudiante en BTS SIO option <i>SISR</i>, passionn&eacute;e par les r&eacute;seaux, les syst&egrave;mes et la s&eacute;curit&eacute; informatique.</p>
+        <p class="about-p">Je m'appelle <strong>Luzia Pedro</strong>, j'ai 21 ans. Apr&egrave;s un Bac STMG option RH et un d&eacute;but de BTS Communication, j'ai trouv&eacute; ma voie dans l'informatique et les infrastructures r&eacute;seau.</p>
+        <p class="about-p">Depuis septembre 2024, je suis en BTS SIO option SISR au <strong>lyc&eacute;e Mathias de Chalon-sur-Sa&ocirc;ne</strong>. Deux stages au <strong>Centre Hospitalier de Chalon-sur-Sa&ocirc;ne</strong> m'ont permis d'acqu&eacute;rir une exp&eacute;rience terrain solide.</p>
+        <p class="about-p">Ce portfolio pr&eacute;sente mes r&eacute;alisations pour l'<strong>&eacute;preuve E5</strong> du BTS SIO.</p>
+      </div>
+      <div class="meta rv d2">
+        <div class="mr"><span class="mr-k">Nom</span><span class="mr-v">Luzia Pedro</span></div>
+        <div class="mr"><span class="mr-k">&Acirc;ge</span><span class="mr-v">21 ans</span></div>
+        <div class="mr"><span class="mr-k">Formation</span><span class="mr-v">BTS SIO option SISR</span></div>
+        <div class="mr"><span class="mr-k">Lyc&eacute;e</span><span class="mr-v">Mathias, Chalon-sur-Sa&ocirc;ne</span></div>
+        <div class="mr"><span class="mr-k">Promotion</span><span class="mr-v">2024 &ndash; 2026</span></div>
+        <div class="mr"><span class="mr-k">Email</span><span class="mr-v">luzia.tomepedro@gmail.com</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 COMPETENCES -->
+<section class="sec sec-dark" id="skills">
+  <div class="sec-inner">
+    <div class="sec-header rv"><div><p class="sec-tag">02 &mdash; Comp&eacute;tences</p><h2>Comp&eacute;tences <i>techniques</i></h2></div><span class="sec-count">02</span></div>
+    <div class="skills-cols rv">
+      <div class="sk-col">
+        <div class="sk-title">R&eacute;seaux &amp; Infrastructure</div>
+        <div class="bubbles"><span class="bub bub-rose">TCP/IP</span><span class="bub bub-rose">VLAN</span><span class="bub bub-rose">Routage</span><span class="bub bub-rose">DNS</span><span class="bub bub-rose">DHCP</span><span class="bub bub-rose">NAT/PAT</span><span class="bub bub-rose">HAProxy</span><span class="bub bub-rose">Packet Tracer</span></div>
+      </div>
+      <div class="sk-col">
+        <div class="sk-title">Syst&egrave;mes &amp; Virtualisation</div>
+        <div class="bubbles"><span class="bub bub-w">Windows Server</span><span class="bub bub-w">Active Directory</span><span class="bub bub-w">GPO</span><span class="bub bub-w">Debian/Linux</span><span class="bub bub-w">Bash</span><span class="bub bub-w">Apache</span><span class="bub bub-w">SSH</span></div>
+      </div>
+      <div class="sk-col">
+        <div class="sk-title">S&eacute;curit&eacute; &amp; Support</div>
+        <div class="bubbles"><span class="bub bub-rose">pfSense</span><span class="bub bub-rose">Pare-feu</span><span class="bub bub-rose">VPN</span><span class="bub bub-rose">OpenVPN</span><span class="bub bub-w">GLPI</span><span class="bub bub-w">Ticketing</span><span class="bub bub-w">Nagios</span><span class="bub bub-w">NRPE</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 PROJETS -->
+<section class="sec" id="projets">
+  <div class="sec-inner">
+    <div class="sec-header rv"><div><p class="sec-tag">03 &mdash; Projets scolaires</p><h2>R&eacute;alisations <i>techniques</i></h2></div><p style="font-size:.82rem;color:var(--muted);max-width:260px;text-align:right;font-weight:300;line-height:1.7;">Cliquez sur un serveur pour voir sa documentation.</p></div>
+    <div class="proj-layout rv">
+      <div class="pc pc-big">
+        <span class="pc-num">01</span>
+        <h3 class="pc-title">InfoTools &mdash; Gestion du parc</h3>
+        <p class="pc-desc">Outil d'inventaire et de gestion du parc informatique : suivi des &eacute;quipements, licences et interventions. Infrastructure avec DMZ, VLAN SIO et VLAN LAN.</p>
+        <div class="ptags"><span class="ptag">GLPI</span><span class="ptag">Inventaire</span><span class="ptag">PHP</span><span class="ptag">pfSense</span><span class="ptag">Nagios</span></div>
+        <div class="srv-row">
+          <div class="srv-lbl">Documentations</div>
+          <div class="srv-chips">
+            <a class="srv-btn" href="doc-SrvWeb.html">SrvWeb</a>
+            <a class="srv-btn" href="doc-SrvBack.html">SrvBack</a>
+            <a class="srv-btn" href="doc-SrvBDD.html">SrvBDD</a>
+            <a class="srv-btn" href="doc-SrvOpt.html">SrvOpt</a>
+            <a class="srv-btn" href="doc-SrvAD.html">SrvAD</a>
+            <a class="srv-btn" href="doc-SrvAD2.html">SrvAD2</a>
+            <a class="srv-btn" href="doc-SrvMess.html">SrvMess</a>
+            <a class="srv-btn" href="doc-SrvProxy.html">SrvProxy</a>
+            <a class="srv-btn" href="doc-SrvGlpi.html">SrvGlpi</a>
+            <a class="srv-btn" href="doc-SrvNagios.html">SrvNagios</a>
+          </div>
+        </div>
+      </div>
+      <div class="pc pc-accent">
+        <span class="pc-num">02</span>
+        <h3 class="pc-title">Hébergement de sites</h3>
+        <p class="pc-desc">Société qui permet à des particuliers d’héberger gratuitement leur site web sur une 
+          plateforme commune.
+          </p>
+        <div class="ptags"><span class="ptag">Bash</span><span class="ptag">Linux</span><span class="ptag">Windows</span></div>
+        <div class="srv-row">
+          <div class="srv-lbl">Documentation</div>
+          <div class="srv-chips">
+            <a class="srv-btn" href="doc-hebergement.html">Hébergement de sites</a>
+
+          </div>
+        </div>
+      </div>
+      <div class="pc pc-accent">
+        <span class="pc-num">03</span>
+        <h3 class="pc-title">Forum BTS SIO</h3>
+        <p class="pc-desc">Cr&eacute;ation et d&eacute;ploiement d'un forum interne pour les &eacute;tudiants BTS SIO avec gestion des utilisateurs, droits et cat&eacute;gories.</p>
+        <div class="ptags"><span class="ptag">HTML/CSS</span><span class="ptag">PHP</span><span class="ptag">MySQL</span></div>
+        <div class="srv-row">
+          <div class="srv-lbl">Documentation</div>
+          <div class="srv-chips">
+            <a class="srv-btn" href="doc-forum.html">Forum BTS SIO </a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pc rv" style="margin-top:1.5rem;">
+      <span class="pc-num">04</span>
+      <h3 class="pc-title">Gestion des formations</h3>
+      <p class="pc-desc">
+        Application web de gestion et de suivi des formations du personnel. Planification des sessions et suivi des comp&eacute;tences acquises.
+      </p>
+      <div class="ptags">
+        <span class="ptag">HTML/CSS</span>
+        <span class="ptag">PHP</span>
+        <span class="ptag">MySQL</span>
+      </div>
+      <div class="srv-row">
+        <div class="srv-lbl">Documentation</div>
+        <div class="srv-chips">
+          <a class="srv-btn" href="doc-gestion.html">Gestion des formations</a>
+        </div>
+      </div>
+    </div>
+</section>
+
+<!-- 04 PROJETS EN STAGE -->
+<section class="sec sec-alt" id="stage">
+  <div class="sec-inner">
+    <div class="sec-header rv">
+      <div>
+        <p class="sec-tag">04 &mdash; Projets en stage</p>
+        <h2>R&eacute;alisations <i>techniques</i></h2>
+      </div>
+      <p style="font-size:.82rem;color:var(--muted);max-width:260px;text-align:right;font-weight:300;line-height:1.7;">
+        Cliquez sur un projet pour voir sa documentation.
+      </p>
+    </div>
+
+    <div class="proj-layout rv">
+      <div class="pc pc-big">
+        <span class="pc-num">05</span>
+        <h3 class="pc-title">Création de serveurs</h3>
+        <p class="pc-desc">
+          Création et configuration d’un serveur puis intégration dans un nouveau VLAN afin d’améliorer la segmentation et l’organisation du réseau.
+        </p>
+        <div class="srv-row">
+          <div class="srv-lbl">Documentation</div>
+          <div class="srv-chips">
+            <a class="srv-btn" href="doc-SrvWeb.html">Documentation création serveurs</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc pc-accent">
+        <span class="pc-num">06</span>
+        <h3 class="pc-title">Borne Wifi</h3>
+        <p class="pc-desc">
+          Maintenance et remise en service des bornes Wi-Fi du Centre Hospitalier de Chalon-sur-Saône : diagnostic des équipements hors service, redémarrage via commandes Linux ou remplacement du matériel défectueux.
+        </p>
+        <div class="srv-row">
+          <div class="srv-lbl">Documentation</div>
+          <div class="srv-chips">
+            <a class="srv-btn" href="doc-forum-html.html">Documentation borne wifi</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pc pc-accent">
+        <span class="pc-num">07</span>
+        <h3 class="pc-title">Cisco Pattern</h3>
+        <p class="pc-desc">
+          Configuration de redirections d’appels dans Cisco Unified Communications Manager afin de permettre à plus de 200 utilisateurs de recevoir les appels professionnels sur leur téléphone personnel en situation de télétravail.
+        </p>
+        <div class="ptags">
+          <span class="ptag">CUCM</span>
+        </div>
+        <div class="srv-row">
+          <div class="srv-lbl">Documentation</div>
+          <div class="srv-chips">
+            <a class="srv-btn" href="doc-cisco-pattern.html">Documentation cisco pattern</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pc rv" style="margin-top:1.5rem;">
+      <span class="pc-num">08</span>
+      <h3 class="pc-title">Support Informatique</h3>
+      <p class="pc-desc">
+        Participation au support informatique auprès des utilisateurs : diagnostic et résolution d’incidents sur les postes de travail, configuration des équipements et assistance technique.
+      </p>
+      <div class="ptags">
+        <span class="ptag">GLPI</span>
+        <span class="ptag">Active Directory</span>
+        <span class="ptag">CUCM</span>
+      </div>
+      <div class="srv-row">
+        <div class="srv-lbl">Documentation</div>
+        <div class="srv-chips">
+          <a class="srv-btn" href="doc-support-informatique.html">Documentation support informatique</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pc pc-accent rv" style="margin-top:1.5rem;">
+      <span class="pc-num">09</span>
+      <h3 class="pc-title">Test Fluke</h3>
+      <p class="pc-desc">
+        Test et diagnostic de prises réseau défectueuses au sein du Centre Hospitalier de Chalon-sur-Saône à l’aide d’un testeur Fluke, afin d’identifier l’origine des dysfonctionnements (câblage, brassage ou connectique).
+      </p>
+      <div class="ptags">
+        <span class="ptag">Patchsee</span>
+        <span class="ptag">Testeur de câble réseau</span>
+        <span class="ptag">Baie de brassage</span>
+      </div>
+      <div class="srv-row">
+        <div class="srv-lbl">Documentation</div>
+        <div class="srv-chips">
+          <a class="srv-btn" href="doc-test-fluke.html">Documentation test fluke</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 05 VEILLE TECHNOLOGIQUE -->
+<section class="sec sec-alt" id="Veille">
+  <div class="sec-inner">
+
+    <div class="sec-header rv">
+      <div>
+        <p class="sec-tag">05 &mdash; Veille technologique</p>
+        <h2>Veille sur les <i>cyberattaques</i></h2>
+      </div>
+      <span class="sec-count">05</span>
+    </div>
+
+    <div style="max-width:700px;margin-bottom:2rem;">
+      <p style="font-size:.88rem;color:var(--muted);line-height:1.9;">
+        Dans le cadre de ma veille technologique en BTS SIO, j’analyse l’évolution des 
+        <strong>cyberattaques</strong> et des menaces informatiques.  
+        Cette veille me permet de suivre les nouvelles techniques utilisées par les attaquants,
+        les impacts sur les entreprises et les moyens de protection des systèmes d’information.
+      </p>
+    </div>
+
+    <div style="border:1px solid var(--border);height:600px;">
+      <iframe 
+        src="https://www.pearltrees.com/lpedro89"
+        style="width:100%;height:100%;border:none;">
+      </iframe>
+    </div>
+
+  </div>
+</section>
+
+<!-- 05 PARCOURS -->
+<section class="sec sec-rose-bg" id="parcours">
+  <div class="sec-inner">
+    <div class="sec-header rv"><div><p class="sec-tag">06 &mdash; Parcours</p><h2>Mon <i>parcours</i></h2></div><span class="sec-count">06</span></div>
+    <div class="parc-grid">
+      <div class="rv d1">
+        <div class="parc-sect-title">Formation</div>
+        <div>
+          <div class="tl-row"><div class="tl-yr">2024&ndash;2026</div><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-body"><div class="tl-place">Lyc&eacute;e Mathias, Chalon-sur-Sa&ocirc;ne</div><div class="tl-role">BTS SIO option SISR</div><div class="tl-desc">Infrastructure syst&egrave;mes &amp; r&eacute;seaux. Administration, virtualisation, cybers&eacute;curit&eacute;.</div></div></div>
+          <div class="tl-row"><div class="tl-yr">2023&ndash;2024</div><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-body"><div class="tl-place">Lycée Jeanne Hachette, Beauvais</div><div class="tl-role">Bts Communication, formation interrompue</div><div class="tl-desc">R&eacute;orientation vers l'informatique en janvier 2024.</div></div></div>
+          <div class="tl-row"><div class="tl-yr">2020&ndash;2023</div><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-body"><div class="tl-place">Lycée Catherine Janot & Raymond Curie, Sens</div><div class="tl-role">Bac STMG option RH &mdash; Obtenu</div><div class="tl-desc">Sciences et Technologies du Management et de la Gestion, sp&eacute;cialit&eacute; RH.</div></div></div>
+        </div>
+      </div>
+      <div class="rv d2">
+        <div class="parc-sect-title">Exp&eacute;riences professionnelles</div>
+        <div>
+          <div class="tl-row"><div class="tl-yr">jan&ndash;f&eacute;v 2026</div><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-body"><div class="tl-place">Centre Hospitalier de Chalon-sur-Sa&ocirc;ne</div><div class="tl-role">Stage 2&egrave;me ann&eacute;e &mdash; Support Informatique</div><div class="tl-desc">Administration du parc hospitalier, support N1/N2, gestion des tickets, maintenance r&eacute;seau.</div></div></div>
+          <div class="tl-row"><div class="tl-yr">mai&ndash;juin 2025</div><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-body"><div class="tl-place">Centre Hospitalier de Chalon-sur-Sa&ocirc;ne</div><div class="tl-role">Stage 1&egrave;re ann&eacute;e &mdash; Support Informatique</div><div class="tl-desc">Assistance utilisateurs, gestion des incidents, inventaire du parc mat&eacute;riel et logiciel.</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 CONTACT -->
+<section class="sec" id="contact">
+  <div class="sec-inner">
+
+    <div class="sec-header rv">
+      <div>
+        <p class="sec-tag">07 — Contact</p>
+        <h2>Me <i>contacter</i></h2>
+      </div>
+      <span class="sec-count">07</span>
+    </div>
+
+    <div class="contact-wrap rv">
+
+      <a class="cc" href="mailto:luzia.tomepedro@gmail.com">
+        <div class="cc-icon">@</div>
+        <div>
+          <div class="cc-lbl">Email</div>
+          <div class="cc-val">luzia.tomepedro@gmail.com</div>
+        </div>
+      </a>
+
+      <div class="cc">
+        <div class="cc-icon">&#x2316;</div>
+        <div>
+          <div class="cc-lbl">Localisation</div>
+          <div class="cc-val">Chalon-sur-Saône, Bourgogne</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<footer>&copy; 2026 &mdash; <span>Luzia Pedro</span> &middot; Portfolio BTS SIO SISR &middot; &Eacute;preuve E5 &middot; Lyc&eacute;e Mathias</footer>
+
+<script>
+const c=document.getElementById('cur'),r=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function t(){c.style.left=mx+'px';c.style.top=my+'px';rx+=(mx-rx)*.1;ry+=(my-ry)*.1;r.style.left=rx+'px';r.style.top=ry+'px';requestAnimationFrame(t);})();
+document.querySelectorAll('a,.pc,.bub').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{c.style.width='14px';c.style.height='14px';r.style.width='44px';r.style.height='44px';});
+  el.addEventListener('mouseleave',()=>{c.style.width='6px';c.style.height='6px';r.style.width='26px';r.style.height='26px';});
+});
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('on');}),{threshold:.07});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
