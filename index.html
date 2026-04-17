@@ -222,6 +222,17 @@ footer span{color:var(--rose);}
   .veille-grid{
     grid-template-columns:1fr;
   }
+
+  .veille-desc{
+  font-size:.82rem;
+  color:var(--muted);
+  line-height:1.75;
+  font-weight:300;
+  margin-bottom:1rem;
+  display:-webkit-box;
+  -webkit-line-clamp:4;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
 }
 </style>
 </head>
@@ -505,20 +516,20 @@ Répartiteur de charge permettant de distribuer les requêtes web entre plusieur
 
     <div style="max-width:760px;margin-bottom:2rem;">
       <p style="font-size:.88rem;color:var(--muted);line-height:1.9;">
-        Dans le cadre de ma veille technologique en BTS SIO, je suis l’actualité liée aux
-        <strong>vulnérabilités</strong>, aux <strong>cyberattaques</strong> et aux
-        <strong>mesures de protection</strong> des systèmes d’information.
-        Cette veille automatisée me permet d’identifier régulièrement de nouvelles menaces,
-        de suivre les alertes de sécurité publiées par des organismes spécialisés et de rester
-        informée sur les risques pesant sur les entreprises et les administrations.
-      </p>
+  Dans le cadre de ma veille technologique en BTS SIO, je suis l’actualité liée aux
+  <strong>failles de sécurité</strong>, aux <strong>vulnérabilités</strong> et aux
+  <strong>cybermenaces</strong>. Cette veille me permet d’identifier les nouvelles alertes,
+  de suivre les publications du CERT-FR et de mieux comprendre les risques pouvant impacter
+  les systèmes d’information des entreprises et des administrations.
+</p>
     </div>
 
     <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.25rem;">
-      <button class="btn btn-line veille-filter active" data-feed="all">Toutes les sources</button>
-      <button class="btn btn-line veille-filter" data-feed="certfr">CERT-FR</button>
-      <button class="btn btn-line veille-filter" data-feed="cisa">CISA</button>
-    </div>
+  <button class="btn btn-line veille-filter active" data-feed="all">Toutes les sources</button>
+  <button class="btn btn-line veille-filter" data-feed="alertes">Alertes CERT-FR</button>
+  <button class="btn btn-line veille-filter" data-feed="avis">Avis CERT-FR</button>
+  <button class="btn btn-line veille-filter" data-feed="actus">Actualités CERT-FR</button>
+</div>
 
     <div id="veille-status" style="font-size:.78rem;color:var(--muted);margin-bottom:1rem;">
       Chargement de la veille…
@@ -634,13 +645,17 @@ document.querySelectorAll('.rv').forEach(el=>io.observe(el));
    ========================= */
 
 const FEEDS = {
-  certfr: {
-    name: "CERT-FR",
+  alertes: {
+    name: "Alerte CERT-FR",
     url: "https://www.cert.ssi.gouv.fr/alerte/feed/"
   },
-  cisa: {
-    name: "CISA",
-    url: "https://www.cisa.gov/news-events/cybersecurity-advisories.xml"
+  avis: {
+    name: "Avis CERT-FR",
+    url: "https://www.cert.ssi.gouv.fr/avis/feed/"
+  },
+  actus: {
+    name: "Actualité CERT-FR",
+    url: "https://www.cert.ssi.gouv.fr/actualite/feed/"
   }
 };
 
@@ -650,9 +665,7 @@ let currentFilter = "all";
 async function fetchFeed(feedKey, feedInfo){
   const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedInfo.url)}`;
 
-  const response = await fetch(apiUrl, {
-    method: "GET"
-  });
+  const response = await fetch(apiUrl, { method: "GET" });
 
   if(!response.ok){
     throw new Error(`Erreur HTTP ${response.status} pour ${feedInfo.name}`);
@@ -664,7 +677,7 @@ async function fetchFeed(feedKey, feedInfo){
     throw new Error(`Réponse invalide pour ${feedInfo.name}`);
   }
 
-  return data.items.slice(0, 8).map(item => ({
+  return data.items.map(item => ({
     source: feedKey,
     sourceLabel: feedInfo.name,
     title: item.title || "Sans titre",
@@ -683,14 +696,14 @@ function stripHtml(html){
 function formatDate(date){
   return new Intl.DateTimeFormat("fr-FR", {
     day: "2-digit",
-    month: "2-digit",
+    month: "long",
     year: "numeric"
   }).format(date);
 }
 
-function truncate(text, max=190){
+function truncate(text, max=220){
   if(text.length <= max) return text;
-  return text.slice(0, max).trim() + "…";
+  return text.slice(0, max).trim() + "...";
 }
 
 function renderVeille(){
@@ -708,7 +721,7 @@ function renderVeille(){
     return;
   }
 
-  status.textContent = `${filtered.length} article(s) affiché(s) — mise à jour automatique selon les flux RSS.`;
+  status.textContent = `${filtered.length} article(s) affiché(s) — publications en français à partir de novembre 2024.`;
 
   list.innerHTML = filtered.map(item => `
     <article class="veille-card rv on">
@@ -719,8 +732,8 @@ function renderVeille(){
       <h3 class="veille-title">
         <a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a>
       </h3>
-      <p class="veille-desc">${truncate(item.desc)}</p>
-      <a class="veille-link" href="${item.link}" target="_blank" rel="noopener noreferrer">Lire l’article</a>
+      <p class="veille-desc">${truncate(item.desc, 220)}</p>
+      <a class="veille-link" href="${item.link}" target="_blank" rel="noopener noreferrer">Lire la suite</a>
     </article>
   `).join("");
 
@@ -729,9 +742,10 @@ function renderVeille(){
 
 async function loadVeille(){
   const status = document.getElementById("veille-status");
-  status.textContent = "Chargement de la veille…";
+  status.textContent = "Chargement de la veille...";
 
   veilleItems = [];
+  const dateMin = new Date("2024-11-01T00:00:00");
 
   for (const [key, info] of Object.entries(FEEDS)) {
     try {
@@ -743,18 +757,19 @@ async function loadVeille(){
   }
 
   veilleItems = veilleItems
+    .filter(item => item.date >= dateMin)
     .sort((a, b) => b.date - a.date)
-    .slice(0, 12);
+    .slice(0, 24);
 
   if (!veilleItems.length) {
     status.innerHTML = `
-      Impossible de charger les actualités automatiquement.<br>
-      Vérifie que ton site est ouvert via un vrai hébergement ou localhost,
-      et non en double-cliquant simplement sur le fichier HTML.
+      Aucun article n'a été récupéré pour le moment.<br>
+      Le flux RSS ne remonte peut-être pas jusqu'à novembre 2024,
+      ou le chargement a été bloqué par le navigateur.
     `;
     return;
   }
-
+  
   renderVeille();
 }catch(error){
     console.error(error);
