@@ -99,7 +99,7 @@ h2 i{font-style:italic;color:var(--rose);}
 .srv-lbl{font-family:var(--mono);font-size:.52rem;letter-spacing:.15em;text-transform:uppercase;color:var(--light);margin-bottom:.45rem;}
 .srv-chips{display:flex;flex-wrap:wrap;gap:.4rem;}
 .srv-btn{font-family:var(--mono);font-size:.6rem;padding:.3rem .75rem;background:var(--black);color:rgba(255,255,255,.8);letter-spacing:.04em;border:1px solid var(--black);cursor:pointer;transition:all .22s;display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;}
-..srv-btn::after{content:'↗';font-size:.55rem;opacity:.5;}
+.srv-btn::after{content:'↗';font-size:.55rem;opacity:.5;}
 .srv-btn:hover{background:var(--rose);border-color:var(--rose);color:var(--white);}
 .pc-accent .srv-btn{background:var(--rose);border-color:var(--rose);color:var(--white);}
 .pc-accent .srv-btn:hover{background:var(--rose-mid);border-color:var(--rose-mid);}
@@ -135,6 +135,93 @@ footer span{color:var(--rose);}
   .sec-inner{padding:0 1.5rem;}
   .about-grid,.parc-grid,.contact-wrap,.skills-cols{grid-template-columns:1fr;}
   .proj-layout{grid-template-columns:1fr;}.pc-big{grid-row:auto;}.pc-full{grid-column:auto;}.pc-full-inner{grid-template-columns:1fr;}
+}
+  .veille-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1rem;
+}
+
+.veille-card{
+  background:var(--white);
+  border:1px solid var(--border);
+  padding:1.35rem;
+  transition:all .25s;
+}
+
+.veille-card:hover{
+  border-color:var(--rose-lt);
+  box-shadow:0 8px 30px rgba(213,132,144,.08);
+}
+
+.veille-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:1rem;
+  margin-bottom:.8rem;
+}
+
+.veille-source{
+  font-family:var(--mono);
+  font-size:.58rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--rose);
+}
+
+.veille-date{
+  font-size:.72rem;
+  color:var(--light);
+}
+
+.veille-title{
+  font-family:var(--serif);
+  font-size:1.15rem;
+  line-height:1.2;
+  margin-bottom:.7rem;
+}
+
+.veille-title a{
+  color:var(--text);
+  text-decoration:none;
+}
+
+.veille-title a:hover{
+  color:var(--rose);
+}
+
+.veille-desc{
+  font-size:.82rem;
+  color:var(--muted);
+  line-height:1.75;
+  font-weight:300;
+  margin-bottom:1rem;
+}
+
+.veille-link{
+  font-family:var(--mono);
+  font-size:.62rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--rose);
+  text-decoration:none;
+}
+
+.veille-link:hover{
+  text-decoration:underline;
+}
+
+.veille-filter.active{
+  background:var(--black);
+  color:var(--white);
+  border-color:var(--black);
+}
+
+@media(max-width:900px){
+  .veille-grid{
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
@@ -411,26 +498,33 @@ Répartiteur de charge permettant de distribuer les requêtes web entre plusieur
     <div class="sec-header rv">
       <div>
         <p class="sec-tag">05 &mdash; Veille technologique</p>
-        <h2>Veille sur les <i>cyberattaques</i></h2>
+        <h2>Veille sur les <i>vulnérabilités et cybermenaces</i></h2>
       </div>
       <span class="sec-count">05</span>
     </div>
 
-    <div style="max-width:700px;margin-bottom:2rem;">
+    <div style="max-width:760px;margin-bottom:2rem;">
       <p style="font-size:.88rem;color:var(--muted);line-height:1.9;">
-        Dans le cadre de ma veille technologique en BTS SIO, j’analyse l’évolution des 
-        <strong>cyberattaques</strong> et des menaces informatiques.  
-        Cette veille me permet de suivre les nouvelles techniques utilisées par les attaquants,
-        les impacts sur les entreprises et les moyens de protection des systèmes d’information.
+        Dans le cadre de ma veille technologique en BTS SIO, je suis l’actualité liée aux
+        <strong>vulnérabilités</strong>, aux <strong>cyberattaques</strong> et aux
+        <strong>mesures de protection</strong> des systèmes d’information.
+        Cette veille automatisée me permet d’identifier régulièrement de nouvelles menaces,
+        de suivre les alertes de sécurité publiées par des organismes spécialisés et de rester
+        informée sur les risques pesant sur les entreprises et les administrations.
       </p>
     </div>
 
-    <div style="border:1px solid var(--border);height:600px;">
-      <iframe 
-        src="https://www.pearltrees.com/lpedro89"
-        style="width:100%;height:100%;border:none;">
-      </iframe>
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.25rem;">
+      <button class="btn btn-line veille-filter active" data-feed="all">Toutes les sources</button>
+      <button class="btn btn-line veille-filter" data-feed="certfr">CERT-FR</button>
+      <button class="btn btn-line veille-filter" data-feed="cisa">CISA</button>
     </div>
+
+    <div id="veille-status" style="font-size:.78rem;color:var(--muted);margin-bottom:1rem;">
+      Chargement de la veille…
+    </div>
+
+    <div id="veille-list" class="veille-grid"></div>
 
   </div>
 </section>
@@ -500,13 +594,166 @@ Répartiteur de charge permettant de distribuer les requêtes web entre plusieur
 const c=document.getElementById('cur'),r=document.getElementById('cur-r');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-(function t(){c.style.left=mx+'px';c.style.top=my+'px';rx+=(mx-rx)*.1;ry+=(my-ry)*.1;r.style.left=rx+'px';r.style.top=ry+'px';requestAnimationFrame(t);})();
-document.querySelectorAll('a,.pc,.bub').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{c.style.width='14px';c.style.height='14px';r.style.width='44px';r.style.height='44px';});
-  el.addEventListener('mouseleave',()=>{c.style.width='6px';c.style.height='6px';r.style.width='26px';r.style.height='26px';});
-});
-const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('on');}),{threshold:.07});
+(function t(){
+  c.style.left=mx+'px';
+  c.style.top=my+'px';
+  rx+=(mx-rx)*.1;
+  ry+=(my-ry)*.1;
+  r.style.left=rx+'px';
+  r.style.top=ry+'px';
+  requestAnimationFrame(t);
+})();
+
+function bindCursorHover(){
+  document.querySelectorAll('a,.pc,.bub,.veille-card,.veille-filter').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{
+      c.style.width='14px';
+      c.style.height='14px';
+      r.style.width='44px';
+      r.style.height='44px';
+    });
+    el.addEventListener('mouseleave',()=>{
+      c.style.width='6px';
+      c.style.height='6px';
+      r.style.width='26px';
+      r.style.height='26px';
+    });
+  });
+}
+bindCursorHover();
+
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting) entry.target.classList.add('on');
+  });
+},{threshold:.07});
 document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+/* =========================
+   VEILLE TECHNOLOGIQUE RSS
+   ========================= */
+
+const FEEDS = {
+  certfr: {
+    name: "CERT-FR",
+    url: "https://www.cert.ssi.gouv.fr/feed/"
+  },
+  cisa: {
+    name: "CISA",
+    url: "https://www.cisa.gov/cybersecurity-advisories/all.xml"
+  }
+};
+
+let veilleItems = [];
+let currentFilter = "all";
+
+async function fetchFeed(feedKey, feedInfo){
+  const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedInfo.url)}`;
+
+  const response = await fetch(apiUrl);
+  if(!response.ok){
+    throw new Error(`Erreur lors du chargement du flux ${feedInfo.name}`);
+  }
+
+  const data = await response.json();
+  if(data.status !== "ok" || !data.items){
+    throw new Error(`Flux invalide pour ${feedInfo.name}`);
+  }
+
+  return data.items.slice(0, 8).map(item => ({
+    source: feedKey,
+    sourceLabel: feedInfo.name,
+    title: item.title || "Sans titre",
+    link: item.link || "#",
+    date: item.pubDate ? new Date(item.pubDate) : new Date(),
+    desc: stripHtml(item.description || item.content || "Aucune description disponible.")
+  }));
+}
+
+function stripHtml(html){
+  const temp = document.createElement("div");
+  temp.innerHTML = html;
+  return (temp.textContent || temp.innerText || "").trim();
+}
+
+function formatDate(date){
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric"
+  }).format(date);
+}
+
+function truncate(text, max=190){
+  if(text.length <= max) return text;
+  return text.slice(0, max).trim() + "…";
+}
+
+function renderVeille(){
+  const list = document.getElementById("veille-list");
+  const status = document.getElementById("veille-status");
+
+  let filtered = veilleItems;
+  if(currentFilter !== "all"){
+    filtered = veilleItems.filter(item => item.source === currentFilter);
+  }
+
+  if(!filtered.length){
+    list.innerHTML = "";
+    status.textContent = "Aucun article trouvé pour cette source.";
+    return;
+  }
+
+  status.textContent = `${filtered.length} article(s) affiché(s) — mise à jour automatique selon les flux RSS.`;
+
+  list.innerHTML = filtered.map(item => `
+    <article class="veille-card rv on">
+      <div class="veille-top">
+        <span class="veille-source">${item.sourceLabel}</span>
+        <span class="veille-date">${formatDate(item.date)}</span>
+      </div>
+      <h3 class="veille-title">
+        <a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a>
+      </h3>
+      <p class="veille-desc">${truncate(item.desc)}</p>
+      <a class="veille-link" href="${item.link}" target="_blank" rel="noopener noreferrer">Lire l’article</a>
+    </article>
+  `).join("");
+
+  bindCursorHover();
+}
+
+async function loadVeille(){
+  const status = document.getElementById("veille-status");
+  status.textContent = "Chargement de la veille…";
+
+  try{
+    const results = await Promise.all(
+      Object.entries(FEEDS).map(([key, info]) => fetchFeed(key, info))
+    );
+
+    veilleItems = results
+      .flat()
+      .sort((a, b) => b.date - a.date)
+      .slice(0, 12);
+
+    renderVeille();
+  }catch(error){
+    console.error(error);
+    status.textContent = "Impossible de charger les actualités automatiquement pour le moment.";
+  }
+}
+
+document.querySelectorAll(".veille-filter").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll(".veille-filter").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentFilter = btn.dataset.feed;
+    renderVeille();
+  });
+});
+
+loadVeille();
 </script>
 </body>
 </html>
