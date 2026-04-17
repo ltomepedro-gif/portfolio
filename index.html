@@ -636,11 +636,11 @@ document.querySelectorAll('.rv').forEach(el=>io.observe(el));
 const FEEDS = {
   certfr: {
     name: "CERT-FR",
-    url: "https://www.cert.ssi.gouv.fr/feed/"
+    url: "https://www.cert.ssi.gouv.fr/alerte/feed/"
   },
   cisa: {
     name: "CISA",
-    url: "https://www.cisa.gov/cybersecurity-advisories/all.xml"
+    url: "https://www.cisa.gov/news-events/cybersecurity-advisories.xml"
   }
 };
 
@@ -650,14 +650,18 @@ let currentFilter = "all";
 async function fetchFeed(feedKey, feedInfo){
   const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedInfo.url)}`;
 
-  const response = await fetch(apiUrl);
+  const response = await fetch(apiUrl, {
+    method: "GET"
+  });
+
   if(!response.ok){
-    throw new Error(`Erreur lors du chargement du flux ${feedInfo.name}`);
+    throw new Error(`Erreur HTTP ${response.status} pour ${feedInfo.name}`);
   }
 
   const data = await response.json();
-  if(data.status !== "ok" || !data.items){
-    throw new Error(`Flux invalide pour ${feedInfo.name}`);
+
+  if(data.status !== "ok" || !Array.isArray(data.items)){
+    throw new Error(`Réponse invalide pour ${feedInfo.name}`);
   }
 
   return data.items.slice(0, 8).map(item => ({
@@ -727,18 +731,32 @@ async function loadVeille(){
   const status = document.getElementById("veille-status");
   status.textContent = "Chargement de la veille…";
 
-  try{
-    const results = await Promise.all(
-      Object.entries(FEEDS).map(([key, info]) => fetchFeed(key, info))
-    );
+  veilleItems = [];
 
-    veilleItems = results
-      .flat()
-      .sort((a, b) => b.date - a.date)
-      .slice(0, 12);
+  for (const [key, info] of Object.entries(FEEDS)) {
+    try {
+      const items = await fetchFeed(key, info);
+      veilleItems.push(...items);
+    } catch (error) {
+      console.error(`Erreur pour ${info.name}:`, error);
+    }
+  }
 
-    renderVeille();
-  }catch(error){
+  veilleItems = veilleItems
+    .sort((a, b) => b.date - a.date)
+    .slice(0, 12);
+
+  if (!veilleItems.length) {
+    status.innerHTML = `
+      Impossible de charger les actualités automatiquement.<br>
+      Vérifie que ton site est ouvert via un vrai hébergement ou localhost,
+      et non en double-cliquant simplement sur le fichier HTML.
+    `;
+    return;
+  }
+
+  renderVeille();
+}catch(error){
     console.error(error);
     status.textContent = "Impossible de charger les actualités automatiquement pour le moment.";
   }
