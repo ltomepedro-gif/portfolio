@@ -221,22 +221,16 @@ footer span{color:var(--rose);}
 @media(max-width:900px){
   .veille-grid{
     grid-template-columns:1fr;
-    }
   }
-  
-
 
   .veille-desc{
-  font-size:.82rem;
-  color:var(--muted);
-  line-height:1.75;
-  font-weight:300;
-  margin-bottom:1rem;
-  display:-webkit-box;
-  -webkit-line-clamp:4;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
+    display:-webkit-box;
+    -webkit-line-clamp:4;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
 }
+
 </style>
 </head>
 <body>
@@ -747,34 +741,35 @@ async function loadVeille(){
   const status = document.getElementById("veille-status");
   status.textContent = "Chargement de la veille...";
 
-  veilleItems = [];
-  const dateMin = new Date("2024-11-01T00:00:00");
+  try {
+    veilleItems = [];
+    const dateMin = new Date("2024-11-01T00:00:00");
 
-  for (const [key, info] of Object.entries(FEEDS)) {
-    try {
-      const items = await fetchFeed(key, info);
-      veilleItems.push(...items);
-    } catch (error) {
-      console.error(`Erreur pour ${info.name}:`, error);
+    for (const [key, info] of Object.entries(FEEDS)) {
+      try {
+        const items = await fetchFeed(key, info);
+        veilleItems.push(...items);
+      } catch (error) {
+        console.error(`Erreur pour ${info.name}:`, error);
+      }
     }
-  }
 
-  veilleItems = veilleItems
-    .filter(item => item.date >= dateMin)
-    .sort((a, b) => b.date - a.date)
-    .slice(0, 24);
+    veilleItems = veilleItems
+      .filter(item => item.date >= dateMin)
+      .sort((a, b) => b.date - a.date)
+      .slice(0, 24);
 
-  if (!veilleItems.length) {
-    status.innerHTML = `
-      Aucun article n'a été récupéré pour le moment.<br>
-      Le flux RSS ne remonte peut-être pas jusqu'à novembre 2024,
-      ou le chargement a été bloqué par le navigateur.
-    `;
-    return;
-  }
-  
-  renderVeille();
-}catch(error){
+    if (!veilleItems.length) {
+      status.innerHTML = `
+        Aucun article n'a été récupéré pour le moment.<br>
+        Le flux RSS ne remonte peut-être pas jusqu'à novembre 2024,
+        ou le chargement a été bloqué par le navigateur.
+      `;
+      return;
+    }
+
+    renderVeille();
+  } catch (error) {
     console.error(error);
     status.textContent = "Impossible de charger les actualités automatiquement pour le moment.";
   }
